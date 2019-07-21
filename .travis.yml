@@ -6,6 +6,10 @@ node_js: stable
 branches:
   only:
     - master
+    
+env:
+  global:
+   - GH_REF: github.com/alfredxinglkey/alfredxinglkey.github.io.git
 
 # 指定node_modules缓存
 cache:
@@ -30,6 +34,10 @@ after_success:
   - git init
   - git config --global user.name "alfred"
   - git config --global user.email "xingyafei0801@outlook.com"
+  - git add -A
+  - git commit -m "add new post"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:master
+  
   # 替换同目录下的_config.yml文件中GH_TOKEN字符串为travis后台配置的变量
   - sed -i "s/GH_TOKEN/${GH_TOKEN}/g" ./_config.yml
   - hexo deploy
